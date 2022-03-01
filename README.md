@@ -1,2 +1,3 @@
 # SharedMediaStreamer
  Currently a proof of concept for learning video streaming consisting of an API and a website.
+ Plans are to have an API that can read a video file and a website that calls on the API to get the video data streamed.
