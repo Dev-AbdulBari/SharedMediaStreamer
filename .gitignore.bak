@@ -74,3 +74,4 @@ artifacts/
 
 # Visual Studio Trace Files
 *.e2e
+ShareMediaStreamer.API/ShareMediaStreamer.API/Properties/launchSettings.json
