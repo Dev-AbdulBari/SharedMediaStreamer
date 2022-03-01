@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/ShareMediaStreamer.API/.vs/ShareMediaStreamer.API/v17
+/ShareMediaStreamer.API/ShareMediaStreamer.API/obj
+/ShareMediaStreamer.API/ShareMediaStreamer.API/Properties/launchSettings.json
