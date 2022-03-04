@@ -2,5 +2,6 @@
 {
     public interface IMediaRepository
     {
+        byte[] GetMediaContents(uint offset, short bufferSizeInMB = 30);
     }
 }
