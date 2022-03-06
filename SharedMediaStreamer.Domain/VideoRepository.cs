@@ -10,7 +10,7 @@ namespace SharedMediaStreamer.Domain
             _mediaFileReader = mediaFileReader;
         }
 
-        public byte[] GetMediaContents(int offset, short bufferSizeInMB = 30)
+        public byte[] GetMediaContents(int offset, short bufferSizeInMB = 5)
         {
             var bufferSizeInBytes = bufferSizeInMB * 1_000_000;
             var buffer = new byte[bufferSizeInBytes];
