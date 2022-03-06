@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SharedMediaStreamer.Domain.Interfaces;
 
 namespace ShareMediaStreamer.API.Controllers
 {
@@ -6,11 +7,16 @@ namespace ShareMediaStreamer.API.Controllers
     [ApiController]
     public class MediaController : ControllerBase
     {
+        private readonly IMediaRepository _mediaRepository;
+        public MediaController(IMediaRepository mediaRepository)
+        {
+            _mediaRepository = mediaRepository;
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
-            // Add media controller actions here
-            return Ok();
+            return File(_mediaRepository.GetMediaContents(0), "application/octet-stream");
         }
     }
 }

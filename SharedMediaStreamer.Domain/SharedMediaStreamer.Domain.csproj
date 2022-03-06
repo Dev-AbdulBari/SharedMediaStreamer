@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SharedMediaStreamer.MediaDataProcessor\SharedMediaStreamer.MediaDataProcessor.csproj" />
+  </ItemGroup>
+
 </Project>
