@@ -1,5 +1,4 @@
 ﻿using SharedMediaStreamer.Domain.Interfaces;
-using SharedMediaStreamer.MediaDataProcessor.Interfaces;
 
 namespace SharedMediaStreamer.Domain
 {
