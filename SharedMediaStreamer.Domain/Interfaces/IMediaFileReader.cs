@@ -1,4 +1,4 @@
-﻿namespace SharedMediaStreamer.MediaDataProcessor.Interfaces
+﻿namespace SharedMediaStreamer.Domain.Interfaces
 {
     public interface IMediaFileReader
     {
