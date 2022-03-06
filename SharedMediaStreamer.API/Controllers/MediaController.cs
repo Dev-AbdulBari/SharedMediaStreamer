@@ -14,7 +14,7 @@ namespace ShareMediaStreamer.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetMedia()
         {
             return File(_mediaRepository.GetMediaContents(0), "application/octet-stream");
         }
