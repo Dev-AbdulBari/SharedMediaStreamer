@@ -1,7 +1,6 @@
 using SharedMediaStreamer.Domain;
 using SharedMediaStreamer.Domain.Interfaces;
 using SharedMediaStreamer.MediaDataProcessor;
-using SharedMediaStreamer.MediaDataProcessor.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
