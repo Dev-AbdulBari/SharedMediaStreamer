@@ -1,7 +1,9 @@
-﻿namespace SharedMediaStreamer.Domain.Interfaces
+﻿using SharedMediaStreamer.Domain.Models;
+
+namespace SharedMediaStreamer.Domain.Interfaces
 {
     public interface IMediaFileReader
     {
-        void GetMediaByteContents(byte[] buffer, int offset, int length);
+        MediaDetails GetVideo(int offset, int length);
     }
 }
