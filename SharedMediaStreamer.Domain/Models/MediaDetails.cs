@@ -8,8 +8,10 @@ namespace SharedMediaStreamer.Domain.Models
 {
     public abstract class MediaDetails
     {
-        public long ContentLength { get; set; }
-        public string ContentRange { get; set; }
+        public string FileName { get; set; }
+        public long FileLength { get; set; }
         public string ContentType { get; set; }
+        public byte[] Content { get; set; }
+        public long BufferSizeInBytes { get; set; }
     }
 }
