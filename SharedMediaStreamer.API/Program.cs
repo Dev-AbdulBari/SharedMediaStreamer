@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IMediaRepository, VideoRepository>();
 builder.Services.AddSingleton<IMediaFileReader, VideoFileReader>();
+builder.Services.AddSingleton<IMediaFileReaderResolver, MediaFileReaderResolver>();
 
 builder.Services.Configure<MediaSettings>(builder.Configuration.GetSection("MediaSettings"));
 
