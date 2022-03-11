@@ -1,23 +1,28 @@
-﻿using SharedMediaStreamer.Domain.Interfaces;
+﻿using Microsoft.Extensions.Options;
+using SharedMediaStreamer.Domain.Interfaces;
+using SharedMediaStreamer.Domain.Models;
+using SharedMediaStreamer.Domain.Models.Settings;
 
 namespace SharedMediaStreamer.Domain
 {
     public class VideoRepository : IMediaRepository
     {
         private IMediaFileReader _mediaFileReader;
-        public VideoRepository(IMediaFileReader mediaFileReader)
+        private short _bufferSizeInMB;
+        public VideoRepository(IMediaFileReaderResolver mediaFileReaderResolver, IOptionsMonitor<MediaSettings> mediaSettings)
         {
-            _mediaFileReader = mediaFileReader;
+            _mediaFileReader = mediaFileReaderResolver.GetMediaFileReader<VideoRepository>();
+            _bufferSizeInMB = mediaSettings.CurrentValue.BufferSizeInMB;
         }
 
-        public byte[] GetMediaContents(int offset, short bufferSizeInMB = 5)
+        public MediaDetails GetMedia(int offset)
         {
-            var bufferSizeInBytes = bufferSizeInMB * 1_000_000;
-            var buffer = new byte[bufferSizeInBytes];
+            return _mediaFileReader.GetVideo(offset, GetBufferSizeInBytes());
+        }
 
-            _mediaFileReader.GetMediaByteContents(buffer, offset, bufferSizeInBytes);
-
-            return buffer;
+        private int GetBufferSizeInBytes()
+        {
+            return _bufferSizeInMB * 1_000_000;
         }
     }
 }

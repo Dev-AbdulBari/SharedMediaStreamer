@@ -1,7 +1,9 @@
-﻿namespace SharedMediaStreamer.Domain.Interfaces
+﻿using SharedMediaStreamer.Domain.Models;
+
+namespace SharedMediaStreamer.Domain.Interfaces
 {
     public interface IMediaRepository
     {
-        byte[] GetMediaContents(int offset, short bufferSizeInMB = 5);
+        MediaDetails GetMedia(int offset);
     }
 }
