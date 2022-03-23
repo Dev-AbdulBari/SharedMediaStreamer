@@ -1,0 +1,32 @@
+$smallPadding: 8px;
+$medPadding: $smallPadding * 2;
+$largePadding: $smallPadding * 3;
+
+:host {
+	display: grid;
+	grid-template-rows: auto 1fr;
+	min-height: 0;
+	height: 100%;
+    
+    .sidenav {
+		width: 250px;
+	}
+    
+    .sidenav-container {
+        height: 100%;
+    }
+
+    .mat-toolbar.mat-primary {
+		position: sticky;
+		top: 0;
+		z-index: 1;
+	}
+
+    .sidenav-content {
+		@media screen and (max-width: 719px) {
+			padding: $medPadding;
+		}
+
+		padding: $largePadding;
+	}
+}
