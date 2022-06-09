@@ -1,0 +1,46 @@
+.header {
+    text-align: center;
+}
+
+.body {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+}
+
+video {
+    font-size: 0;
+    width: 60%;
+}
+
+#messageView {
+    margin-left: 10px;
+    background: white;
+    border-style: solid;
+    border-color: black;
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+}
+
+#messages {
+    height: 100%;
+    overflow-y: scroll;
+}
+
+#messages p {
+    border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+}
+
+#messageForm {
+    width: 100%;
+    align-self: flex-end;
+}
+
+::ng-deep .mat-form-field-wrapper{
+    margin-bottom: -1.25em;
+ }

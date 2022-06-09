@@ -1,0 +1,17 @@
+<div class="header" *ngIf="username">
+    <h1>Enjoy the shared media!</h1>
+</div>
+<div class="body" *ngIf="username">
+        <video id="mainPlayer" controls="controls" [src]="videoSource">
+        </video>
+    <div id="messageView">
+        <mat-toolbar color="accent">
+            <h1>Chat</h1>
+        </mat-toolbar>
+        <div id="messages" [innerHtml]="messages">
+        </div>
+        <mat-form-field id="messageForm" appearance="fill">
+            <input matInput #message maxlength="256" placeholder="Say something nice..">
+        </mat-form-field>
+    </div>
+</div>
