@@ -1,0 +1,11 @@
+<mat-dialog-content>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Username</mat-label>
+        <input matInput placeholder="Enter a username" [(ngModel)]="username">
+      </mat-form-field>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button color="primary" [mat-dialog-close]="username">Okay</button>
+</mat-dialog-actions>
