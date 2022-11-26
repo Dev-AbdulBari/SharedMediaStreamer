@@ -4,6 +4,6 @@ namespace SharedMediaStreamer.Domain.Interfaces
 {
     public interface IMediaRepository
     {
-        MediaDetails GetMedia(int offset);
+        MediaDetails GetMedia(long offset);
     }
 }
