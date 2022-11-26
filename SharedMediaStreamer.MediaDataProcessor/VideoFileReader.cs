@@ -9,12 +9,12 @@ namespace SharedMediaStreamer.MediaDataProcessor
     {
         private string _pathToTestVideoFile;
 
-        public VideoFileReader(IOptionsMonitor<MediaSettings> mediaSettings)
+        public VideoFileReader(IOptions<MediaSettings> mediaSettings)
         {
-            _pathToTestVideoFile = mediaSettings.CurrentValue.FilePath;
+            _pathToTestVideoFile = $"{mediaSettings.Value.FolderPath}\\{mediaSettings.Value.FileName}";
         }
 
-        public MediaDetails GetVideo(int offset, int length)
+        public MediaDetails GetVideo(long offset, int length)
         {
             using (FileStream fileStream = File.Open(_pathToTestVideoFile, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
