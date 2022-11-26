@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using SharedMediaStreamer.Domain.Interfaces;
 using SharedMediaStreamer.Domain.Models;
+using SharedMediaStreamer.Domain.Models.Settings;
 
 namespace ShareMediaStreamer.API.Controllers
 {
@@ -9,9 +12,11 @@ namespace ShareMediaStreamer.API.Controllers
     public class MediaController : ControllerBase
     {
         private readonly IMediaRepository _mediaRepository;
-        public MediaController(IMediaRepository mediaRepository)
+        private string _folderPath;
+        public MediaController(IMediaRepository mediaRepository, IOptions<MediaSettings> mediaSettings)
         {
             _mediaRepository = mediaRepository;
+            _folderPath = mediaSettings.Value.FolderPath;
         }
 
         [HttpGet]
@@ -27,7 +32,21 @@ namespace ShareMediaStreamer.API.Controllers
             return File(mediaDetails.Content, mediaDetails.ContentType);
         }
 
-        private void SetResponseHeaders(int contentOffset, MediaDetails mediaDetails)
+        [HttpGet]
+        [Route("subtitles")]
+        public IActionResult GetSubtitles()
+        {
+            var subtitleFile = $"{_folderPath}\\subtitles.vtt";
+
+            if (System.IO.File.Exists(subtitleFile))
+            {
+                return File(System.IO.File.ReadAllBytes(subtitleFile), "text/vtt");
+            }
+
+            return NotFound();
+        }
+
+        private void SetResponseHeaders(long contentOffset, MediaDetails mediaDetails)
         {
             var contentBufferSize = Math.Min(contentOffset + mediaDetails.BufferSizeInBytes, mediaDetails.FileLength - 1);
 
@@ -37,7 +56,7 @@ namespace ShareMediaStreamer.API.Controllers
             Response.StatusCode = 206;
         }
 
-        private int ExtractNumericValuesFromRequestRange(string range)
+        private long ExtractNumericValuesFromRequestRange(string range)
         {
             string extractedNumericValuesAsString = "";
 
@@ -46,7 +65,7 @@ namespace ShareMediaStreamer.API.Controllers
                 if (char.IsDigit(c)) extractedNumericValuesAsString += c;
             }
 
-            return int.Parse(extractedNumericValuesAsString);
+            return long.Parse(extractedNumericValuesAsString);
         }
     }
 }
