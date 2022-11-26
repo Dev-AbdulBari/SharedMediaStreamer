@@ -15,7 +15,7 @@ namespace SharedMediaStreamer.Domain
             _bufferSizeInMB = mediaSettings.CurrentValue.BufferSizeInMB;
         }
 
-        public MediaDetails GetMedia(int offset)
+        public MediaDetails GetMedia(long offset)
         {
             return _mediaFileReader.GetVideo(offset, GetBufferSizeInBytes());
         }
