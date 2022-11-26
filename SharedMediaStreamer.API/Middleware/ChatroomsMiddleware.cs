@@ -1,5 +1,7 @@
-﻿using SharedMediaStreamer.API.Middleware.Interfaces;
+﻿using Newtonsoft.Json;
+using SharedMediaStreamer.API.Middleware.Interfaces;
 using SharedMediaStreamer.API.Middleware.Models;
+using SharedMediaStreamer.Domain.Models;
 using System.Net.WebSockets;
 using System.Text;
 
@@ -40,6 +42,16 @@ namespace SharedMediaStreamer.API.Middleware
 
             _roomsRepository.AddUserToRoom(currentUser, roomId);
 
+            foreach (var user in _roomsRepository.GetRoom(roomId).Users)
+            {
+                if (user.UserConnectionSocket.State != WebSocketState.Open)
+                {
+                    continue;
+                }
+
+                await SendStringAsync(user.UserConnectionSocket, "{\"messageEventType\":1,\"message\":\"" + currentUser.UserName + " has joined \"}", ct);
+            }
+
             while (true)
             {
                 if (ct.IsCancellationRequested)
@@ -48,6 +60,8 @@ namespace SharedMediaStreamer.API.Middleware
                 }
 
                 var response = await ReceiveStringAsync(currentSocket, ct);
+                var chatMessageEvent = JsonConvert.DeserializeObject<ChatMessageEvent>(response);
+
                 if (string.IsNullOrEmpty(response))
                 {
                     if (currentSocket.State != WebSocketState.Open)
@@ -65,18 +79,23 @@ namespace SharedMediaStreamer.API.Middleware
                         continue;
                     }
 
-                    if (currentSocket == user.UserConnectionSocket)
+
+                    if (user.UserConnectionSocket == currentSocket && chatMessageEvent.MessageEventType == MessageEventType.VideoTimePlay |
+                        chatMessageEvent.MessageEventType == MessageEventType.VideoTimePause)
                     {
                         continue;
                     }
-
-                    response = "{\"message\": \"" + response + "\", \"messageEventType\": \"MESSAGE\"}";
 
                     await SendStringAsync(user.UserConnectionSocket, response, ct);
                 }
             }
 
             _roomsRepository.RemoveUserFromRoom(currentUser, roomId);
+
+            foreach (var user in _roomsRepository.GetRoom(roomId).Users)
+            {
+                await SendStringAsync(user.UserConnectionSocket, "{\"messageEventType\":1,\"message\":\"" + currentUser.UserName + " has left \"}", ct);
+            }
 
             await currentSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", ct);
             currentSocket.Dispose();
