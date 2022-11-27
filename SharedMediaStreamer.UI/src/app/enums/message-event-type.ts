@@ -1,4 +1,7 @@
 export enum MessageEventType {
     Message,
-    VideoTime
+    Broadcast,
+    VideoTimePlay,
+    VideoTimePause,
+    VideoTimeSeek
 }
