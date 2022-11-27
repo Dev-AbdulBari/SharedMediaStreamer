@@ -20,7 +20,7 @@ namespace SharedMediaStreamer.API.Middleware.Repository
 
         public string CreateRoom()
         {
-            string roomId = Guid.NewGuid().ToString();
+            string roomId = Guid.NewGuid().ToString().Substring(0,4);
             _rooms.Add(new Room(roomId));
             return roomId;
         }
