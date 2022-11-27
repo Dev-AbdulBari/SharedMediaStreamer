@@ -20,6 +20,8 @@ import { MatInputModule } from '@angular/material/input';
 import { NamePromptComponent } from './components/room/name-prompt/name-prompt.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,9 @@ import { FormsModule } from '@angular/forms';
     HttpClientModule,
     MatInputModule,
     MatDialogModule,
-    FormsModule
+    FormsModule,
+    MatBadgeModule,
+    MatTooltipModule
   ],
   providers: [
     RoomGuard
