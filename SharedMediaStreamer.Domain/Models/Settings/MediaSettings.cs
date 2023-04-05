@@ -2,7 +2,8 @@
 {
     public class MediaSettings
     {
-        public string FilePath { get; set; }
+        public string FolderPath { get; set; }
+        public string FileName { get; set; }
         public short BufferSizeInMB { get; set; }
     }
 }

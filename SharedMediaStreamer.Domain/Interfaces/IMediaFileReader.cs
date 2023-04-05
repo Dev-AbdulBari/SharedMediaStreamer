@@ -4,6 +4,6 @@ namespace SharedMediaStreamer.Domain.Interfaces
 {
     public interface IMediaFileReader
     {
-        MediaDetails GetVideo(int offset, int length);
+        MediaDetails GetVideo(long offset, int length);
     }
 }
