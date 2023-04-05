@@ -3,7 +3,7 @@
 </div>
 <div class="body" *ngIf="username">
     <video id="mainPlayer" controls="controls" crossorigin="anonymous" [src]="videoSource" (play)="playEventHandler()" (pause)="pauseEventHandler()" (seeked)="seekedEventHandler()" #videoPlayer>
-        <track label="English" kind="subtitles" srclang="en" [src]="url + '/api/media/subtitles'" default />
+        <track label="English" kind="subtitles" srclang="en" [src]="subtitleUrl" default />
     </video>
     <div id="messageView">
         <mat-toolbar color="accent">
