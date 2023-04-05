@@ -16,7 +16,7 @@ import { first } from 'rxjs';
 })
 export class RoomComponent implements OnInit {
   @ViewChild('videoPlayer') videoPlayer!: ElementRef;
-  
+
   roomId!: string;
   username!: string;
   websocket!: WebSocketSubject<ChatMessageEvent>;
@@ -25,74 +25,68 @@ export class RoomComponent implements OnInit {
   chatMessageInput: string = "";
   users: string[] = [];
   isVideoEvent: boolean = false;
-  url: string = "http://blueblink.ddns.net:5000";
-  websocketUrl: string = "ws://blueblink.ddns.net:5000";
+  url: string = "<SharedMediaStreamerApiUrl>";
+  subtitleUrl: string = this.url + "/api/media/subtitles";
+  websocketUrl: string = "<SharedMediaStreamerApiWebsocketUrl>";
 
   constructor(private currentRoute: ActivatedRoute, private dialog: MatDialog, private apiService: SharedMediaStreamerApiService) {
     this.currentRoute.params.subscribe(urlParamters => {
       this.roomId = urlParamters['roomId']
     });
   }
-  
+
   ngOnInit(): void {
-    this.dialog.open(NamePromptComponent, {disableClose: true}).afterClosed().subscribe(usernameInput => {
-      if (usernameInput != null || usernameInput != "")
-      {
-        this.username = usernameInput;
-        this.setVideoSource();
-        this.websocketInit();
-      }
+    this.dialog.open(NamePromptComponent, { disableClose: true }).afterClosed().subscribe(usernameInput => {
+      this.username = usernameInput;
+      this.setVideoSource();
+      this.websocketInit();      
     });
   }
 
   sendMessage(matInput: HTMLInputElement): void {
     console.log(matInput.value);
-    this.websocket.next({messageEventType: MessageEventType.Message, message: matInput.value, user: this.username})
+    this.websocket.next({ messageEventType: MessageEventType.Message, message: matInput.value, user: this.username })
     matInput.value = "";
   }
 
   seekedEventHandler() {
-    if(!this.isVideoEvent) {
+    if (!this.isVideoEvent) {
       console.log("Seeked at: " + this.videoPlayer.nativeElement.currentTime)
-      this.websocket.next({messageEventType: MessageEventType.VideoTimeSeek, message: this.videoPlayer.nativeElement.currentTime, user: this.username});
+      this.websocket.next({ messageEventType: MessageEventType.VideoTimeSeek, message: this.videoPlayer.nativeElement.currentTime, user: this.username });
     }
 
     this.isVideoEvent = false;
   }
 
   playEventHandler(): void {
-    
-    if (!this.isVideoEvent)
-    {      
+    if (!this.isVideoEvent) {
       console.log("played at : " + this.videoPlayer.nativeElement.currentTime);
-      this.websocket.next({messageEventType: MessageEventType.VideoTimePlay, message: this.videoPlayer.nativeElement.currentTime, user: this.username});
+      this.websocket.next({ messageEventType: MessageEventType.VideoTimePlay, message: this.videoPlayer.nativeElement.currentTime, user: this.username });
     }
 
     this.isVideoEvent = false;
   }
 
   pauseEventHandler(): void {
-    if (!this.isVideoEvent)
-    {
+    if (!this.isVideoEvent) {
       console.log("paused at : " + this.videoPlayer.nativeElement.currentTime);
-      this.websocket.next({messageEventType: MessageEventType.VideoTimePause, message: this.videoPlayer.nativeElement.currentTime, user: this.username});
+      this.websocket.next({ messageEventType: MessageEventType.VideoTimePause, message: this.videoPlayer.nativeElement.currentTime, user: this.username });
     }
 
     this.isVideoEvent = false;
   }
-  
+
   private setVideoSource() {
     this.videoSource = this.url + "/api/media";
   }
 
   private websocketInit() {
     const websocketUrl = this.websocketUrl + "/?username=" + this.username + "&room=" + this.roomId;
-    debugger;
     this.websocket = webSocket<ChatMessageEvent>(websocketUrl);
     console.log(this.websocket);
 
     this.websocket.subscribe(
-      value => { this.chatEventHandler(value)}
+      value => { this.chatEventHandler(value) }
     )
   }
 
@@ -101,19 +95,18 @@ export class RoomComponent implements OnInit {
       this.messages += `<p class="message">${chatEvent.user}: ${chatEvent.message}</p>`;
     } else if (chatEvent.messageEventType == MessageEventType.Broadcast) {
       this.messages += `<p class="broadcast">${chatEvent.message}</p>`;
-      this.getRoomInformation();      
+      this.getRoomInformation();
     } else if (chatEvent.messageEventType == MessageEventType.VideoTimePlay) {
       this.messages += `<p class="broadcast">${chatEvent.user} has played the video</p>`;
       this.isVideoEvent = true;
       this.videoPlayer.nativeElement.currentTime = chatEvent.message;
-      this.videoPlayer.nativeElement.play();  
+      this.videoPlayer.nativeElement.play();
     } else if (chatEvent.messageEventType == MessageEventType.VideoTimePause) {
       this.messages += `<p class="broadcast">${chatEvent.user} has paused the video</p>`;
       this.isVideoEvent = true;
       this.videoPlayer.nativeElement.currentTime = chatEvent.message;
       this.videoPlayer.nativeElement.pause();
-    } else if (chatEvent.messageEventType == MessageEventType.VideoTimeSeek)
-    {
+    } else if (chatEvent.messageEventType == MessageEventType.VideoTimeSeek) {
       this.messages += `<p class="broadcast">${chatEvent.user} has skipped the video</p>`;
       this.isVideoEvent = true;
       this.videoPlayer.nativeElement.currentTime = chatEvent.message;

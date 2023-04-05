@@ -24,7 +24,6 @@ export class SharedMediaStreamerApiService {
   }
 
   public postRoom(): Observable<string> {
-    debugger;
     return this.httpClient.post(this.url + "/api/room", null, {responseType: 'text'}).pipe(catchError(error => {
       console.log('Post request failed')
       return '';
