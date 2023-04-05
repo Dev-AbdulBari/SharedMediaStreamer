@@ -56,10 +56,23 @@ namespace SharedMediaStreamer.API.Middleware
             {
                 if (ct.IsCancellationRequested)
                 {
+                    foreach (var user in _roomsRepository.GetRoom(roomId).Users)
+                    {
+                        if (user.UserConnectionSocket.State == WebSocketState.Open)
+                        {
+                            await SendStringAsync(user.UserConnectionSocket, "{\"messageEventType\":1,\"message\":\"" + currentUser.UserName + " has left \"}", ct);
+                        }
+                    }
                     break;
                 }
 
                 var response = await ReceiveStringAsync(currentSocket, ct);
+
+                if (response == null)
+                {
+                    break;
+                }
+
                 var chatMessageEvent = JsonConvert.DeserializeObject<ChatMessageEvent>(response);
 
                 if (string.IsNullOrEmpty(response))
@@ -80,8 +93,8 @@ namespace SharedMediaStreamer.API.Middleware
                     }
 
 
-                    if (user.UserConnectionSocket == currentSocket && chatMessageEvent.MessageEventType == MessageEventType.VideoTimePlay |
-                        chatMessageEvent.MessageEventType == MessageEventType.VideoTimePause)
+                    if (user.UserConnectionSocket == currentSocket && (chatMessageEvent.MessageEventType == MessageEventType.VideoTimePlay |
+                        chatMessageEvent.MessageEventType == MessageEventType.VideoTimePause))
                     {
                         continue;
                     }
@@ -94,10 +107,17 @@ namespace SharedMediaStreamer.API.Middleware
 
             foreach (var user in _roomsRepository.GetRoom(roomId).Users)
             {
-                await SendStringAsync(user.UserConnectionSocket, "{\"messageEventType\":1,\"message\":\"" + currentUser.UserName + " has left \"}", ct);
+                if (user.UserConnectionSocket.State == WebSocketState.Open)
+                {
+                    await SendStringAsync(user.UserConnectionSocket, "{\"messageEventType\":1,\"message\":\"" + currentUser.UserName + " has left \"}", ct);
+                }
             }
 
-            await currentSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", ct);
+            if (currentSocket.State == WebSocketState.Open)
+            {
+                await currentSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", ct);
+            }
+
             currentSocket.Dispose();
         }
 
