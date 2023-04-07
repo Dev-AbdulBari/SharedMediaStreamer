@@ -1,0 +1,21 @@
+<div class="header" *ngIf="username">
+    <h1>Enjoy the shared media!</h1>
+</div>
+<div class="body" *ngIf="username">
+    <video id="mainPlayer" controls="controls" crossorigin="anonymous" [src]="videoSource" (play)="playEventHandler()" (pause)="pauseEventHandler()" (seeked)="seekedEventHandler()" #videoPlayer>
+        <track label="English" kind="subtitles" srclang="en" [src]="subtitleUrl" default />
+    </video>
+    <div id="messageView">
+        <mat-toolbar color="accent">
+            <h1>Chat</h1>
+            <span id="spacer"></span>
+            <button mat-mini-fab color="primary" (click)="getUsers()">
+                <mat-icon [matBadge]="users.length" matBadgeColor="warn">account_circle</mat-icon>
+            </button>
+        </mat-toolbar>
+        <div id="messages" [innerHtml]="messages"></div>
+        <mat-form-field id="messageForm" appearance="fill">
+            <input matInput #message maxlength="256" (keydown.enter)="sendMessage(message)" placeholder="Say something nice.." [value]="chatMessageInput">
+        </mat-form-field>
+    </div>
+</div>
